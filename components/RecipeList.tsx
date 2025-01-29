@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import RecipeListLoading from "./RecipeListLoading";
 
 interface Recipe {
   idMeal: string;
@@ -39,7 +40,8 @@ export default function RecipeList() {
     const res = await axios.get(
       `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
     );
-    return res.data.meals.map((meal: Meal) => ({ ...meal, category })) || [];
+    return res.data.meals.map((meal :Meal) => ({ ...meal, category })) || [];
+       
   };
 
   // Get recipe details by id
@@ -59,10 +61,13 @@ export default function RecipeList() {
 
       // Recipe total number
       const recipePromises = fetchedCategories.map((category: string) => {
-        fetchRecipesByCategory(category);
+        return fetchRecipesByCategory(category);
       });
+      console.log(recipePromises);
+
       const recipesByCategory = await Promise.all(recipePromises);
       const allRecipes = recipesByCategory.flat();
+
       setTotalRecipes(allRecipes.length);
     } catch (error) {
       console.error("Error fetching categories or recipes:", error);
@@ -119,24 +124,24 @@ export default function RecipeList() {
     setCurrentPage(newPage);
   };
 
+
   return (
-    <div>
-      <h1>Recipes</h1>
+    <div className="my-3">
       {loading ? (
-        <p>Loading...</p>
+        <RecipeListLoading />
       ) : (
         <>
-          <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-center justify-center mb-5">
             {pageRecipes.map((recipe) => (
-              <div key={recipe.idMeal} className="recipe-card">
-                <img src={recipe.strMealThumb} alt={recipe.strMeal} />
-                <h3>{recipe.strMeal}</h3>
-                <p>Category: {recipe.strCategory}</p>
-                <p>Area: {recipe.strArea}</p>
+              <div key={recipe.idMeal} className="w-[300px] xl:w-[400px] mx-auto bg-white shadow-lg rounded-lg p-4">
+                <img src={recipe.strMealThumb} alt={recipe.strMeal} className="w-full h-[200px] object-cover rounded-md" />
+                <h3 className="text-lg font-semibold my-2 line-clamp-2 max-h-[75px] overflow-hidden">{recipe.strMeal}</h3>
+                <p className="text-sm text-gray-600">Category: {recipe.strCategory}</p>
+                <p className="text-sm text-gray-600">Area: {recipe.strArea}</p>
               </div>
             ))}
           </div>
-          <div className="pagination">
+          <div className="">
             {Array.from({
               length: Math.ceil(totalRecipes / recipesPerPage),
             }).map((_, index) => (
