@@ -2,6 +2,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import RecipeListLoading from "./RecipeListLoading";
+import Image from "next/image";
+import Link from "next/link";
 
 interface Recipe {
   idMeal: string;
@@ -133,12 +135,12 @@ export default function RecipeList() {
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-center justify-center mb-5">
             {pageRecipes.map((recipe) => (
-              <div key={recipe.idMeal} className="w-[300px] xl:w-[400px] mx-auto bg-white shadow-lg rounded-lg p-4">
-                <img src={recipe.strMealThumb} alt={recipe.strMeal} className="w-full h-[200px] object-cover rounded-md" />
+              <Link href={`/${recipe.idMeal}`} key={recipe.idMeal} className="w-[300px] xl:w-[400px] mx-auto bg-white shadow-lg rounded-lg p-4">
+                <Image width={'200'} height={'200'} src={recipe.strMealThumb} alt={recipe.strMeal} className="w-full h-[200px] object-cover rounded-md" />
                 <h3 className="text-lg font-semibold my-2 line-clamp-2 max-h-[75px] overflow-hidden">{recipe.strMeal}</h3>
                 <p className="text-sm text-gray-600">Category: {recipe.strCategory}</p>
                 <p className="text-sm text-gray-600">Area: {recipe.strArea}</p>
-              </div>
+              </Link>
             ))}
           </div>
           <div className="">
