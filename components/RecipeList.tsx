@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import RecipeListLoading from "./RecipeListLoading";
 import Image from "next/image";
 import Link from "next/link";
+import Pagination from "./Pagination";
 
 interface Recipe {
   idMeal: string;
@@ -25,7 +26,8 @@ export default function RecipeList() {
   const [categories, setCategories] = useState<string[]>([]); // Categories list
   const [loading, setLoading] = useState<boolean>(false);
 
-  const recipesPerPage = 10;
+  const recipesPerPage = 9;
+  const totalPages = Math.ceil(totalRecipes / recipesPerPage);
 
   // Get categories
   const fetchCategories = async () => {
@@ -133,7 +135,7 @@ export default function RecipeList() {
         <RecipeListLoading />
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-center justify-center mb-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-center justify-center">
             {pageRecipes.map((recipe) => (
               <Link href={`/${recipe.idMeal}`} key={recipe.idMeal} className="w-[300px] xl:w-[400px] mx-auto bg-white shadow-lg rounded-lg p-4">
                 <Image width={'200'} height={'200'} src={recipe.strMealThumb} alt={recipe.strMeal} className="w-full h-[200px] object-cover rounded-md" />
@@ -143,7 +145,9 @@ export default function RecipeList() {
               </Link>
             ))}
           </div>
-          <div className="">
+          
+          <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
+          {/* <div className="">
             {Array.from({
               length: Math.ceil(totalRecipes / recipesPerPage),
             }).map((_, index) => (
@@ -155,7 +159,7 @@ export default function RecipeList() {
                 {index + 1}
               </button>
             ))}
-          </div>
+          </div> */}
         </>
       )}
     </div>
