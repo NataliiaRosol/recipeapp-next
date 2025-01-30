@@ -124,9 +124,7 @@ export default function RecipeList() {
     }
   }, [currentPage, categories]);
 
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
-  };
+  
 
 
   return (
@@ -147,19 +145,7 @@ export default function RecipeList() {
           </div>
           
           <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
-          {/* <div className="">
-            {Array.from({
-              length: Math.ceil(totalRecipes / recipesPerPage),
-            }).map((_, index) => (
-              <button
-                key={index}
-                onClick={() => handlePageChange(index + 1)}
-                disabled={currentPage === index + 1}
-              >
-                {index + 1}
-              </button>
-            ))}
-          </div> */}
+          
         </>
       )}
     </div>
